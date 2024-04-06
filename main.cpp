@@ -59,16 +59,27 @@ void drawTile(int x, int y, int ny, int wx, int hy) {
 void drawPatternNumber(int x, int y, int ny, int wx, int hy) {
     glColor3f(0.0,0.0,0.0);
 
+    // Nim of Team
+    // Highest nim = ilham
+    // So total of columns = 12 and total of rows = 7
+
+    int wahyudi = 4;
+    int dani = 9;
+    int evi = 5;
+    int ilham = 7;
+
+
+
     for(int i = 0; i < x; i++) {
         for(int j = 0; j < y; j++) {
             if(i % 2 == 0) {
                 int currentNumber = (i * y + j + 1);
-                if(currentNumber % 10 == 4 || currentNumber % 10 == 7) {
+                if(currentNumber % 10 == wahyudi || currentNumber % 10 == dani || currentNumber % 10 == evi || currentNumber % 10 == ilham) {
                     drawNumber((i * y + j + 1), j * wx + 10, i * hy + 10);
                 }
             } else {
                 int currentNumber = (i * y + (y - j));
-                if(currentNumber % 10 == 4 || currentNumber % 10 == 7) {
+                if(currentNumber % 10 == wahyudi || currentNumber % 10 == dani || currentNumber % 10 == evi || currentNumber % 10 == ilham) {
                     drawNumber((i * y + (y - j)), j * wx + 10, i * hy + 10);
                 }
             }
@@ -138,6 +149,10 @@ void drawTrack(int w, int h, int x, int wx) {
     }
 }
 
+void pionTile() {
+
+}
+
 void display(){
 	glClear(GL_COLOR_BUFFER_BIT);
 	glPointSize(4);
@@ -173,7 +188,7 @@ int main(int argc, char* argv[]){
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
 	glutInitWindowSize(600,350);
 	glutInitWindowPosition(300,200);
-	glutCreateWindow("Segitiga Titik");
+	glutCreateWindow("Ular Tangga");
 	glutDisplayFunc(display);
 	myinit();
 	glutMainLoop();
