@@ -25,10 +25,10 @@ void drawTile(int x, int y, int ny, int wx, int hy) {
         for(int j = 0; j < y; j++) {
             if(i % 2 == 0) {
                 if(j % 2 == 0) {
-                    // Biru
+                    // Merah
                     glColor3f(1.0, 0.0, 0.0);
                 } else {
-                    // Kuning
+                    // Putih
                     glColor3f(1.0, 1.0, 1.0);
                 }
                 glBegin(GL_POLYGON);
@@ -39,10 +39,10 @@ void drawTile(int x, int y, int ny, int wx, int hy) {
                 glEnd();
             } else {
                 if(j % 2 == 0) {
-                    // Kuning
+                    // Putih
                     glColor3f(1.0, 1.0, 1.0);
                 } else {
-                    // Biru
+                    // Merah
                     glColor3f(1.0, 0.0, 0.0);
                 }
                 glBegin(GL_POLYGON);
@@ -114,11 +114,13 @@ void drawBorderTile(int w, int h) {
 }
 
 void drawTrack(int w, int h, int x, int wx) {
+    //Hitam
     glColor3f(0.0, 0.0, 0.0);
+
     for(int i = 1; i <= x; i++) {
         if(i % 2 == 0) {
             glBegin(GL_POLYGON);
-                // Border
+                // Border Kanan Kiri
                 glVertex2f(w, i * wx);
                 glVertex2f(wx, i * wx);
                 glVertex2f(wx, i * wx - 4);
@@ -126,7 +128,7 @@ void drawTrack(int w, int h, int x, int wx) {
             glEnd();
         } else {
             glBegin(GL_POLYGON);
-                // Border
+                // Border Kiri Kanan
                 glVertex2f(0, i * wx);
                 glVertex2f(w - wx, i * wx);
                 glVertex2f(w - wx, i * wx - 4);
@@ -134,15 +136,6 @@ void drawTrack(int w, int h, int x, int wx) {
             glEnd();
         }
     }
-
-    // glBegin(GL_POLYGON);
-    //     // Border
-    //     glVertex2f(0, 50);
-    //     glVertex2f(w - 50, 50);
-    //     glVertex2f(w - 50, 46);
-    //     glVertex2f(0, 46);
-    // glEnd();
-
 }
 
 void display(){
