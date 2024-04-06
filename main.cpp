@@ -74,6 +74,42 @@ void drawPatternNumber(int x, int y, int ny, int wx, int hy) {
             }
         }
     }
+}
+
+void drawBorderTile(int w, int h) {
+    glColor3f(0.0, 1.0, 0.0);
+
+    glBegin(GL_POLYGON);
+        //Border Kiri
+        glVertex2f(0, h);
+        glVertex2f(4, h);
+        glVertex2f(4, 0);
+        glVertex2f(0, 0);
+    glEnd();
+
+    glBegin(GL_POLYGON);
+    // Border Atas
+        glVertex2f(0, h);
+        glVertex2f(w, h);
+        glVertex2f(w, h - 4);
+        glVertex2f(0, h - 4);
+    glEnd();
+
+    glBegin(GL_POLYGON);
+        // Border Kanan
+        glVertex2f(w, 0);
+        glVertex2f(w - 4, 0);
+        glVertex2f(w - 4, h);
+        glVertex2f(w, h);
+    glEnd();
+
+    glBegin(GL_POLYGON);
+        // Border Bawah
+        glVertex2f(0, 0);
+        glVertex2f(w, 0);
+        glVertex2f(w, 4);
+        glVertex2f(0, 4);
+    glEnd();
 
 }
 
@@ -84,11 +120,16 @@ void display(){
     int x = 7;
     int y = 12;
     int ny = 7;
+    int w = 600;
+    int h = 350;
     int wx = 350 / x;
     int hy = 600 / y;
 
+    //drawBorderTile(w, h);
     drawTile(x, y, ny, wx, hy);
     drawPatternNumber(x, y, ny, wx, hy);
+    glColor3f(0.0, 1.0, 0.0);
+    drawBorderTile(w, h);
 
 	glFlush();
 }
