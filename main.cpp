@@ -26,10 +26,10 @@ void drawTile(int x, int y, int ny, int wx, int hy) {
             if(i % 2 == 0) {
                 if(j % 2 == 0) {
                     // Biru
-                    glColor3f(0.0, 0.0, 1.0);
+                    glColor3f(1.0, 0.0, 0.0);
                 } else {
                     // Kuning
-                    glColor3f(1.0, 1.0, 0.0);
+                    glColor3f(1.0, 1.0, 1.0);
                 }
                 glBegin(GL_POLYGON);
                     glVertex2f(j * wx, hy * (i + 1));
@@ -40,10 +40,10 @@ void drawTile(int x, int y, int ny, int wx, int hy) {
             } else {
                 if(j % 2 == 0) {
                     // Kuning
-                    glColor3f(1.0, 1.0, 0.0);
+                    glColor3f(1.0, 1.0, 1.0);
                 } else {
                     // Biru
-                    glColor3f(0.0, 0.0, 1.0);
+                    glColor3f(1.0, 0.0, 0.0);
                 }
                 glBegin(GL_POLYGON);
                     glVertex2f(j * wx, hy * (i+ 1));
@@ -77,7 +77,7 @@ void drawPatternNumber(int x, int y, int ny, int wx, int hy) {
 }
 
 void drawBorderTile(int w, int h) {
-    glColor3f(0.0, 1.0, 0.0);
+    glColor3f(0.0, 0.0, 0.0);
 
     glBegin(GL_POLYGON);
         //Border Kiri
@@ -113,6 +113,38 @@ void drawBorderTile(int w, int h) {
 
 }
 
+void drawTrack(int w, int h, int x, int wx) {
+    glColor3f(0.0, 0.0, 0.0);
+    for(int i = 1; i <= x; i++) {
+        if(i % 2 == 0) {
+            glBegin(GL_POLYGON);
+                // Border
+                glVertex2f(w, i * wx);
+                glVertex2f(wx, i * wx);
+                glVertex2f(wx, i * wx - 4);
+                glVertex2f(w, i * wx - 4);
+            glEnd();
+        } else {
+            glBegin(GL_POLYGON);
+                // Border
+                glVertex2f(0, i * wx);
+                glVertex2f(w - wx, i * wx);
+                glVertex2f(w - wx, i * wx - 4);
+                glVertex2f(0, i * wx - 4);
+            glEnd();
+        }
+    }
+
+    // glBegin(GL_POLYGON);
+    //     // Border
+    //     glVertex2f(0, 50);
+    //     glVertex2f(w - 50, 50);
+    //     glVertex2f(w - 50, 46);
+    //     glVertex2f(0, 46);
+    // glEnd();
+
+}
+
 void display(){
 	glClear(GL_COLOR_BUFFER_BIT);
 	glPointSize(4);
@@ -130,6 +162,7 @@ void display(){
     drawPatternNumber(x, y, ny, wx, hy);
     glColor3f(0.0, 1.0, 0.0);
     drawBorderTile(w, h);
+    drawTrack(w, h, x, wx);
 
 	glFlush();
 }
