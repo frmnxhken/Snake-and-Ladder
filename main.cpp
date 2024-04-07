@@ -244,43 +244,58 @@ void drawSnake() {
 		glVertex2f(80,15);
     glEnd();
     glBegin(GL_POLYGON);
-        glVertex2f(150,100);
+		glVertex2f(150,100);
 		glVertex2f(100,150);
 		glVertex2f(160,100);
-		glVertex2f(130,100);
+		glVertex2f(150,100);
     glEnd();
     glBegin(GL_POLYGON);
-        glVertex2f(100,150);
+		glVertex2f(100,150);
+		glVertex2f(180,180);
 		glVertex2f(160,180);
-		glVertex2f(170,180);
-		glVertex2f(100,160);
+		glVertex2f(100,150);
     glEnd();
 
     // Snake2
     glBegin(GL_POLYGON);
-        glVertex2f(330,110);
-		glVertex2f(320,80);
-		glVertex2f(320,80);
-		glVertex2f(300,100);
+        glVertex2f(420, 110);
+        glVertex2f(350, 150);
+        glVertex2f(350, 150);
+        glVertex2f(410, 110);
     glEnd();
     glBegin(GL_POLYGON);
-        glVertex2f(340,100);
-		glVertex2f(350,200);
-		glVertex2f(360,200);
-		glVertex2f(330,110);
+        glVertex2f(350, 150);
+        glVertex2f(400, 250);
+        glVertex2f(400, 250);
+        glVertex2f(360, 150);
     glEnd();
     glBegin(GL_POLYGON);
-        glVertex2f(350,200);
-		glVertex2f(300,250);
-		glVertex2f(360,200);
-		glVertex2f(330,200);
+        glVertex2f(400, 250);
+        glVertex2f(320, 320);
+        glVertex2f(320, 320);
+        glVertex2f(390, 250);
+    glEnd();
+
+    // Snake3
+    glBegin(GL_POLYGON);
+        glVertex2f(450, 10);
+        glVertex2f(580, 80);
+        glVertex2f(580, 70);
+        glVertex2f(450, 10);
     glEnd();
     glBegin(GL_POLYGON);
-        glVertex2f(300,320);
-		glVertex2f(310,320);
-		glVertex2f(305,250);
-		glVertex2f(300,250);
+        glVertex2f(580, 80);
+        glVertex2f(520, 120);
+        glVertex2f(520, 110);
+        glVertex2f(580, 80);
     glEnd();
+    glBegin(GL_POLYGON);
+        glVertex2f(520, 110);
+        glVertex2f(590, 170);
+        glVertex2f(590, 160);
+        glVertex2f(520, 110);
+    glEnd();
+
 }
 
 //Pion triangle
@@ -372,6 +387,11 @@ void onPressSpace(unsigned char key, int x, int y) {
                 glutPostRedisplay();
             }
 
+            if(scoreP1 != 1 && snakes[scoreP1]) {
+                scoreP1 = snakes[scoreP1];
+                glutPostRedisplay();
+            }
+
             if (scoreP1 >= 84) {
                 scoreP1 = 84;
                 glutPostRedisplay();
@@ -394,6 +414,11 @@ void onPressSpace(unsigned char key, int x, int y) {
             // state player 2
             if(scoreP2 != 1 && ladders[scoreP2]) {
                 scoreP2 = ladders[scoreP2];
+                glutPostRedisplay();
+            }
+
+            if(scoreP2 != 1 && snakes[scoreP2]) {
+                scoreP2 = snakes[scoreP2];
                 glutPostRedisplay();
             }
 
@@ -470,7 +495,9 @@ void init_snakes_ladders()
 	ladders[25] = 68;
 	ladders[38] = 81;
 
-	snakes[17] = 7;
+	snakes[45] = 2;
+	snakes[79] = 33;
+	snakes[37] = 10;
 
 }
 
