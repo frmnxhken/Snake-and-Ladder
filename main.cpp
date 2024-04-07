@@ -33,6 +33,7 @@ void drawNumber(int number, int x, int y) {
     }
 }
 
+// Pattern tile
 void drawTile(int x, int y, int ny, int wx, int hy) {
     for(int i = 0; i < x; i++) {
         for(int j = 0; j < y; j++) {
@@ -81,18 +82,57 @@ void drawPatternNumber(int x, int y, int ny, int wx, int hy) {
     int evi = 5;
     int ilham = 7;
 
-    for(int i = 0; i < x; i++) {
+    /**
+
+        Pattern yang lama jangan dihapus takutnya masih digunakan kembali
+
+    **/
+
+    /**for(int i = 0; i < x; i++) {
         for(int j = 0; j < y; j++) {
             if(i % 2 == 0) {
                 int currentNumber = (i * y + j + 1);
                 if(currentNumber % 10 == wahyudi || currentNumber % 10 == dani || currentNumber % 10 == evi || currentNumber % 10 == ilham) {
-                    drawNumber((i * y + j + 1), j * wx + 10, i * hy + 10);
+                    drawNumber((i * y + j + 1) % 10, j * wx + 10, i * hy + 10);
                 }
             } else {
                 int currentNumber = (i * y + (y - j));
                 if(currentNumber % 10 == wahyudi || currentNumber % 10 == dani || currentNumber % 10 == evi || currentNumber % 10 == ilham) {
-                    drawNumber((i * y + (y - j)), j * wx + 10, i * hy + 10);
+                    drawNumber((i * y + (y - j)) % 10, j * wx + 10, i * hy + 10);
                 }
+            }
+        }
+    }**/
+
+    /**
+
+        Jangan diubah-ubah kode yang ini
+
+    **/
+
+    for(int i = 0; i < x; i++) {
+        for(int j = 0; j < y; j++) {
+            int currentNumber;
+            if(i % 2 == 0) {
+                currentNumber = (i * y + j + 1);
+            } else {
+                currentNumber = (i * y + (y - j));
+            }
+
+            int firstDigit = floor(currentNumber / 10);
+            int secondDigit = currentNumber % 10;
+
+            // Pengecekan apakah digit pertama atau kedua mengandung angka yang ada pada nama
+            if((firstDigit == wahyudi || firstDigit == dani || firstDigit == evi || firstDigit == ilham) &&
+               (secondDigit == wahyudi || secondDigit == dani || secondDigit == evi || secondDigit == ilham)) {
+                drawNumber(currentNumber, j * wx + 10, i * hy + 10);
+                // Jika keduanya cocok, tampilkan kedua digit
+            } else if (firstDigit == wahyudi || firstDigit == dani || firstDigit == evi || firstDigit == ilham && secondDigit != 0) {
+                drawNumber(firstDigit, j * wx + 10, i * hy + 10);
+                // Jika hanya digit pertama cocok, tampilkan digit pertama saja
+            } else if (secondDigit == wahyudi || secondDigit == dani || secondDigit == evi || secondDigit == ilham) {
+                drawNumber(secondDigit, j * wx + 10, i * hy + 10);
+                // Jika hanya digit kedua cocok, tampilkan digit kedua saja
             }
         }
     }
@@ -135,6 +175,7 @@ void drawBorderTile(int w, int h) {
 
 }
 
+// Border of track
 void drawTrack(int w, int h, int x, int wx) {
     //Hitam
     glColor3f(0.0, 0.0, 0.0);
@@ -193,6 +234,56 @@ void drawLadder(int startX, int startY, int step, int stepHeight, int stepWidth,
 
 }
 
+void drawSnake() {
+    glColor3f(0.0, 1.0, 1.0);
+    // Snake1
+    glBegin(GL_POLYGON);
+        glVertex2f(80,10);
+		glVertex2f(150,100);
+		glVertex2f(160,100);
+		glVertex2f(80,15);
+    glEnd();
+    glBegin(GL_POLYGON);
+        glVertex2f(150,100);
+		glVertex2f(100,150);
+		glVertex2f(160,100);
+		glVertex2f(130,100);
+    glEnd();
+    glBegin(GL_POLYGON);
+        glVertex2f(100,150);
+		glVertex2f(160,180);
+		glVertex2f(170,180);
+		glVertex2f(100,160);
+    glEnd();
+
+    // Snake2
+    glBegin(GL_POLYGON);
+        glVertex2f(330,110);
+		glVertex2f(320,80);
+		glVertex2f(320,80);
+		glVertex2f(300,100);
+    glEnd();
+    glBegin(GL_POLYGON);
+        glVertex2f(340,100);
+		glVertex2f(350,200);
+		glVertex2f(360,200);
+		glVertex2f(330,110);
+    glEnd();
+    glBegin(GL_POLYGON);
+        glVertex2f(350,200);
+		glVertex2f(300,250);
+		glVertex2f(360,200);
+		glVertex2f(330,200);
+    glEnd();
+    glBegin(GL_POLYGON);
+        glVertex2f(300,320);
+		glVertex2f(310,320);
+		glVertex2f(305,250);
+		glVertex2f(300,250);
+    glEnd();
+}
+
+//Pion triangle
 void pionTriangle(int score, int w, int h, int xA, int yA, int wx, int hy) {
     int x = 0;
     int y = 0;
@@ -228,6 +319,7 @@ void pionTriangle(int score, int w, int h, int xA, int yA, int wx, int hy) {
     glEnd();
 }
 
+// Pion square
 void pionTile(int score, int w, int h, int xA, int yA, int wx, int hy) {
     int x = 0;
     int y = 0;
@@ -264,6 +356,7 @@ void pionTile(int score, int w, int h, int xA, int yA, int wx, int hy) {
     glEnd();
 }
 
+// function to generate random number range 1-6
 int randomNumber() {
     srand (time(NULL));
     int randAngka = rand() % 6 + 1;
@@ -272,6 +365,7 @@ int randomNumber() {
 
 void onPressSpace(unsigned char key, int x, int y) {
     if(!gameOver) {
+        // state player 1
         if(turn == 1) {
             if(scoreP1 != 1 && ladders[scoreP1]) {
                 scoreP1 = ladders[scoreP1];
@@ -297,6 +391,7 @@ void onPressSpace(unsigned char key, int x, int y) {
                 }
             }
         } else {
+            // state player 2
             if(scoreP2 != 1 && ladders[scoreP2]) {
                 scoreP2 = ladders[scoreP2];
                 glutPostRedisplay();
@@ -348,6 +443,8 @@ void display(){
     drawLadder(530, -120, 6, 30, 30, 30);
     drawLadder(-50, 120, 6, 30, 30, -30);
     drawLadder(-88, 320, 6, 30, 30, -90);
+
+    drawSnake();
 
     glutKeyboardFunc(onPressSpace);
 
