@@ -1,10 +1,13 @@
 # depslib dependency file v1.0
-1712430912 source:d:\school\semester 4\snakeandladder\main.cpp
+1712463809 source:d:\school\semester 4\snakeandladder\main.cpp
 	<windows.h>
 	<GLUT/glut.h>
 	<GL/glut.h>
 	<string.h>
 	<stdio.h>
+	<time.h>
+	<iostream>
+	<cmath>
 
 1301111162 d:\codeblocks\mingw\include\windows.h
 	<winresrc.h>
@@ -228,6 +231,10 @@
 	<sys/types.h>
 
 1341006780 d:\codeblocks\mingw\include\sys\types.h
+	<_mingw.h>
+	<stddef.h>
+
+1341006776 d:\codeblocks\mingw\include\time.h
 	<_mingw.h>
 	<stddef.h>
 

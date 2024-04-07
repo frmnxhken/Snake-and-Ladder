@@ -6,7 +6,14 @@
 #include <GL/glut.h>
 #include <string.h>
 #include <stdio.h>
+#include <time.h>
+#include<iostream>
+#include <cmath>
 #endif
+
+using namespace std;
+
+int scoreP1 = 1;
 
 void drawNumber(int number, int x, int y) {
     // Mengubah angka menjadi string
@@ -149,8 +156,59 @@ void drawTrack(int w, int h, int x, int wx) {
     }
 }
 
-void pionTile() {
+void pionTile(int score, int w, int h, int xA, int yA, int wx, int hy) {
+    int x = 0;
+    int y = 0;
+    //int z = 55;
 
+    y = (floor((score - 1) / 12 + 1) * hy - 20);
+
+    if(score <= 12) {
+        x = floor(score * wx - 20);
+    } else {
+        if(floor((score / 12) % 2 != 0)) {
+            if(score % 12 != 0) {
+                x = floor(w - ((score - 1) % 12) * wx - 20);
+            } else {
+                x = floor(((score - 1) % 12) * wx - 20);
+            }
+        }else {
+            if(score % 12 != 0) {
+                x = floor(((score - 1) % 12) * wx + 30);
+            } else {
+                x = floor(w - ((score - 1) % 12) * wx - 20);
+            }
+
+        }
+    }
+
+    // Biru
+    glColor3f(0.0, 0.0, 1.0);
+    glBegin(GL_POLYGON);
+        glVertex2f(x, y - 10);
+        glVertex2f(x - 10, y - 10);
+        glVertex2f(x - 10, y);
+        glVertex2f(x, y);
+    glEnd();
+}
+
+int randomNumber() {
+    srand (time(NULL));
+    int randAngka = rand() % 6 + 1;
+    cout << "Angka hasil random: " << floor(randAngka) << endl;
+    return randAngka;
+}
+
+void onPressSpace(unsigned char key, int x, int y) {
+    if (scoreP1 <= 84) {
+        if (key == ' ') {
+            cout << "Angka hasil random: " << randomNumber() << endl;
+            scoreP1 += randomNumber();
+            glutPostRedisplay();
+        }
+    } else {
+        cout << "Game Over" << endl;
+    }
 }
 
 void display(){
@@ -165,12 +223,15 @@ void display(){
     int wx = 350 / x;
     int hy = 600 / y;
 
-    //drawBorderTile(w, h);
+    //scoreP1 = randomNumber();
     drawTile(x, y, ny, wx, hy);
     drawPatternNumber(x, y, ny, wx, hy);
     glColor3f(0.0, 1.0, 0.0);
     drawBorderTile(w, h);
     drawTrack(w, h, x, wx);
+    pionTile(scoreP1, w, h, x, y, wx, hy);
+
+    glutKeyboardFunc(onPressSpace);
 
 	glFlush();
 }
@@ -191,6 +252,7 @@ int main(int argc, char* argv[]){
 	glutCreateWindow("Ular Tangga");
 	glutDisplayFunc(display);
 	myinit();
+	//randomNumber();
 	glutMainLoop();
 	return 0;
 }
