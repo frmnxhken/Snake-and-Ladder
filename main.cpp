@@ -194,16 +194,17 @@ void pionTile(int score, int w, int h, int xA, int yA, int wx, int hy) {
 
     y = (floor((score - 1) / 12 + 1) * hy - 20);
 
+
     if(score <= 12) {
         x = floor(score * wx - 20);
     } else {
-        if(floor((score / 12) % 2 != 0)) {
+        if(floor((score / 12) % 2 != 0)) {;
             if(score % 12 != 0) {
                 x = floor(w - ((score - 1) % 12) * wx - 20);
             } else {
-                x = floor(((score - 1) % 12) * wx - 20);
+                x = floor(((score - 1) % 12) * wx + 20);
             }
-        }else {
+        } else {
             if(score % 12 != 0) {
                 x = floor(((score - 1) % 12) * wx + 30);
             } else {
@@ -231,14 +232,17 @@ int randomNumber() {
 }
 
 void onPressSpace(unsigned char key, int x, int y) {
-    if (key == ' ') {
-        scoreP1 += randomNumber();
-        glutPostRedisplay();
-        if (scoreP1 <= 84) {
+    if (scoreP1 < 84) {
+        if (key == ' ') {
+            //scoreP1 += randomNumber();
+            scoreP1 += 1;
+            glutPostRedisplay();
             cout << "Angka hasil random: " << randomNumber() << endl;
-        } else {
-            cout << "Game Over" << endl;
         }
+    } else {
+        scoreP1 = 84;
+        glutPostRedisplay();
+        cout << "Game Over" << endl;
     }
 }
 
