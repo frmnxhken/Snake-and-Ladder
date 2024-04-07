@@ -156,10 +156,41 @@ void drawTrack(int w, int h, int x, int wx) {
     }
 }
 
+void drawLadder(int startX, int startY, int step, int stepHeight, int stepWidth, int deg) {
+    glPushMatrix();
+    glRotatef(deg, 0.0, 0.0, 1.0);
+    glBegin(GL_POLYGON);
+        glVertex2f(startX, startY + step * stepHeight);
+        glVertex2f(startX - 5, startY + step * stepHeight);
+        glVertex2f(startX - 5, startY);
+        glVertex2f(startX, startY);
+    glEnd();
+
+    glBegin(GL_POLYGON);
+        glVertex2f(startX + stepWidth, startY + step * stepHeight);
+        glVertex2f(startX + stepWidth + 5, startY + step * stepHeight);
+        glVertex2f(startX + stepWidth + 5, startY);
+        glVertex2f(startX + stepWidth, startY);
+    glEnd();
+
+    // Anak buah tangga
+
+    for(int i = 1; i <= step - 1; i++) {
+        glBegin(GL_POLYGON);
+            glVertex2f(startX, startY + stepHeight * i);
+            glVertex2f(startX + stepWidth, startY + stepHeight * i);
+            glVertex2f(startX + stepWidth, startY + stepHeight * i+ 5);
+            glVertex2f(startX, startY + stepHeight * i + 5);
+        glEnd();
+    }
+
+    glPopMatrix();
+
+}
+
 void pionTile(int score, int w, int h, int xA, int yA, int wx, int hy) {
     int x = 0;
     int y = 0;
-    //int z = 55;
 
     y = (floor((score - 1) / 12 + 1) * hy - 20);
 
@@ -200,14 +231,14 @@ int randomNumber() {
 }
 
 void onPressSpace(unsigned char key, int x, int y) {
-    if (scoreP1 <= 84) {
-        if (key == ' ') {
+    if (key == ' ') {
+        scoreP1 += randomNumber();
+        glutPostRedisplay();
+        if (scoreP1 <= 84) {
             cout << "Angka hasil random: " << randomNumber() << endl;
-            scoreP1 += randomNumber();
-            glutPostRedisplay();
+        } else {
+            cout << "Game Over" << endl;
         }
-    } else {
-        cout << "Game Over" << endl;
     }
 }
 
@@ -223,13 +254,14 @@ void display(){
     int wx = 350 / x;
     int hy = 600 / y;
 
-    //scoreP1 = randomNumber();
     drawTile(x, y, ny, wx, hy);
     drawPatternNumber(x, y, ny, wx, hy);
     glColor3f(0.0, 1.0, 0.0);
     drawBorderTile(w, h);
     drawTrack(w, h, x, wx);
     pionTile(scoreP1, w, h, x, y, wx, hy);
+    drawLadder(210, 5, 8, 30, 30, 0);
+    drawLadder(530, -120, 6, 30, 30, 30);
 
     glutKeyboardFunc(onPressSpace);
 
@@ -252,7 +284,6 @@ int main(int argc, char* argv[]){
 	glutCreateWindow("Ular Tangga");
 	glutDisplayFunc(display);
 	myinit();
-	//randomNumber();
 	glutMainLoop();
 	return 0;
 }
