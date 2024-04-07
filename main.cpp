@@ -13,7 +13,13 @@
 
 using namespace std;
 
+int * snakes;
+int * ladders;
+
 int scoreP1 = 1;
+int scoreP2 = 1;
+int turn = 1;
+bool gameOver = false;
 
 void drawNumber(int number, int x, int y) {
     // Mengubah angka menjadi string
@@ -74,8 +80,6 @@ void drawPatternNumber(int x, int y, int ny, int wx, int hy) {
     int dani = 9;
     int evi = 5;
     int ilham = 7;
-
-
 
     for(int i = 0; i < x; i++) {
         for(int j = 0; j < y; j++) {
@@ -157,6 +161,7 @@ void drawTrack(int w, int h, int x, int wx) {
 }
 
 void drawLadder(int startX, int startY, int step, int stepHeight, int stepWidth, int deg) {
+    glColor3f(0.0, 0.0, 1.0);
     glPushMatrix();
     glRotatef(deg, 0.0, 0.0, 1.0);
     glBegin(GL_POLYGON);
@@ -186,6 +191,41 @@ void drawLadder(int startX, int startY, int step, int stepHeight, int stepWidth,
 
     glPopMatrix();
 
+}
+
+void pionTriangle(int score, int w, int h, int xA, int yA, int wx, int hy) {
+    int x = 0;
+    int y = 0;
+
+    y = (floor((score - 1) / 12 + 1) * hy - 20);
+
+
+    if(score <= 12) {
+        x = floor(score * wx - 20);
+    } else {
+        if(floor((score / 12) % 2 != 0)) {;
+            if(score % 12 != 0) {
+                x = floor(w - ((score - 1) % 12) * wx - 20);
+            } else {
+                x = floor(((score - 1) % 12) * wx + 20);
+            }
+        } else {
+            if(score % 12 != 0) {
+                x = floor(((score - 1) % 12) * wx + 30);
+            } else {
+                x = floor(w - ((score - 1) % 12) * wx - 20);
+            }
+
+        }
+    }
+
+    // Biru
+    glColor3f(0.0, 1.0, 0.0);
+    glBegin(GL_POLYGON);
+        glVertex2f(x, y + 15);
+        glVertex2f(x + 15, y);
+        glVertex2f(x, y);
+    glEnd();
 }
 
 void pionTile(int score, int w, int h, int xA, int yA, int wx, int hy) {
@@ -227,22 +267,60 @@ void pionTile(int score, int w, int h, int xA, int yA, int wx, int hy) {
 int randomNumber() {
     srand (time(NULL));
     int randAngka = rand() % 6 + 1;
-    cout << "Angka hasil random: " << floor(randAngka) << endl;
     return randAngka;
 }
 
 void onPressSpace(unsigned char key, int x, int y) {
-    if (scoreP1 < 84) {
-        if (key == ' ') {
-            //scoreP1 += randomNumber();
-            scoreP1 += 1;
-            glutPostRedisplay();
-            cout << "Angka hasil random: " << randomNumber() << endl;
+    if(!gameOver) {
+        if(turn == 1) {
+            if(scoreP1 != 1 && ladders[scoreP1]) {
+                scoreP1 = ladders[scoreP1];
+                glutPostRedisplay();
+            }
+
+            if (scoreP1 >= 84) {
+                scoreP1 = 84;
+                glutPostRedisplay();
+                cout << "Player 1 Win!!!" << endl;
+                gameOver = true;
+            } else {
+                if (key == ' ') {
+                    scoreP1 += randomNumber();
+                    turn = 2;
+                    cout << "Player 1: " << randomNumber() << endl;
+                    glutPostRedisplay();
+                    if(scoreP1 >= 84) {
+                        cout << "Player 1 Win!!!" << endl;
+                        scoreP1 = 84;
+                        gameOver = true;
+                    }
+                }
+            }
+        } else {
+            if(scoreP2 != 1 && ladders[scoreP2]) {
+                scoreP2 = ladders[scoreP2];
+                glutPostRedisplay();
+            }
+
+            if (scoreP2 >= 84) {
+                scoreP2 = 84;
+                glutPostRedisplay();
+                cout << "Player 2 Win!!!" << endl;
+                gameOver = true;
+            } else {
+                if (key == ' ') {
+                    scoreP2 += randomNumber();
+                    turn = 1;
+                    cout << "Player 2: " << randomNumber() << endl;
+                    glutPostRedisplay();
+                    if(scoreP2 >= 84) {
+                        cout << "Player 2 Win!!!" << endl;
+                        scoreP2 = 84;
+                        gameOver = true;
+                    }
+                }
+            }
         }
-    } else {
-        scoreP1 = 84;
-        glutPostRedisplay();
-        cout << "Game Over" << endl;
     }
 }
 
@@ -264,8 +342,12 @@ void display(){
     drawBorderTile(w, h);
     drawTrack(w, h, x, wx);
     pionTile(scoreP1, w, h, x, y, wx, hy);
+    pionTriangle(scoreP2, w, h, x, y, wx, hy);
+
     drawLadder(210, 5, 8, 30, 30, 0);
     drawLadder(530, -120, 6, 30, 30, 30);
+    drawLadder(-50, 120, 6, 30, 30, -30);
+    drawLadder(-88, 320, 6, 30, 30, -90);
 
     glutKeyboardFunc(onPressSpace);
 
@@ -280,6 +362,21 @@ void myinit(){
 	glClearColor(1.0,1.0,1.0,1.0);
 }
 
+void init_snakes_ladders()
+{
+	snakes = new int[100];
+	ladders = new int[100];
+
+	ladders[1] = 1;
+	ladders[5] = 53;
+	ladders[15] = 18;
+	ladders[25] = 68;
+	ladders[38] = 81;
+
+	snakes[17] = 7;
+
+}
+
 int main(int argc, char* argv[]){
 	glutInit(&argc,argv);
 	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
@@ -288,6 +385,7 @@ int main(int argc, char* argv[]){
 	glutCreateWindow("Ular Tangga");
 	glutDisplayFunc(display);
 	myinit();
+	init_snakes_ladders();
 	glutMainLoop();
 	return 0;
 }
