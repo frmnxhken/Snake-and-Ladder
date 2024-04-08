@@ -40,7 +40,7 @@ void drawTile(int x, int y, int ny, int wx, int hy) {
             if(i % 2 == 0) {
                 if(j % 2 == 0) {
                     // Merah
-                    glColor3f(1.0, 0.0, 0.0);
+                    glColor3f(0.0, 0.7, 0.4);
                 } else {
                     // Putih
                     glColor3f(1.0, 1.0, 1.0);
@@ -57,7 +57,7 @@ void drawTile(int x, int y, int ny, int wx, int hy) {
                     glColor3f(1.0, 1.0, 1.0);
                 } else {
                     // Merah
-                    glColor3f(1.0, 0.0, 0.0);
+                    glColor3f(0.0, 0.7, 0.4);
                 }
                 glBegin(GL_POLYGON);
                     glVertex2f(j * wx, hy * (i+ 1));
@@ -202,7 +202,7 @@ void drawTrack(int w, int h, int x, int wx) {
 }
 
 void drawLadder(int startX, int startY, int step, int stepHeight, int stepWidth, int deg) {
-    glColor3f(0.0, 0.0, 1.0);
+    glColor3f(1.0, 0.7, 0.0);
     glPushMatrix();
     glRotatef(deg, 0.0, 0.0, 1.0);
     glBegin(GL_POLYGON);
@@ -235,7 +235,7 @@ void drawLadder(int startX, int startY, int step, int stepHeight, int stepWidth,
 }
 
 void drawSnake() {
-    glColor3f(0.0, 1.0, 1.0);
+    glColor3f(1.0, 0.0, 0.0);
     // Snake1
     glBegin(GL_POLYGON);
         glVertex2f(80,10);
@@ -326,7 +326,7 @@ void pionTriangle(int score, int w, int h, int xA, int yA, int wx, int hy) {
     }
 
     // Biru
-    glColor3f(0.0, 1.0, 0.0);
+    glColor3f(1.0, 0.0, 0.0);
     glBegin(GL_POLYGON);
         glVertex2f(x, y + 15);
         glVertex2f(x + 15, y);
@@ -382,16 +382,6 @@ void onPressSpace(unsigned char key, int x, int y) {
     if(!gameOver) {
         // state player 1
         if(turn == 1) {
-            if(scoreP1 != 1 && ladders[scoreP1]) {
-                scoreP1 = ladders[scoreP1];
-                glutPostRedisplay();
-            }
-
-            if(scoreP1 != 1 && snakes[scoreP1]) {
-                scoreP1 = snakes[scoreP1];
-                glutPostRedisplay();
-            }
-
             if (scoreP1 >= 84) {
                 scoreP1 = 84;
                 glutPostRedisplay();
@@ -403,6 +393,16 @@ void onPressSpace(unsigned char key, int x, int y) {
                     turn = 2;
                     cout << "Player 1: " << randomNumber() << endl;
                     glutPostRedisplay();
+                    if(scoreP1 != 1 && ladders[scoreP1]) {
+                        scoreP1 = ladders[scoreP1];
+                        glutPostRedisplay();
+                    }
+
+                    if(scoreP1 != 1 && snakes[scoreP1]) {
+                        scoreP1 = snakes[scoreP1];
+                        glutPostRedisplay();
+                    }
+
                     if(scoreP1 >= 84) {
                         cout << "Player 1 Win!!!" << endl;
                         scoreP1 = 84;
@@ -412,16 +412,6 @@ void onPressSpace(unsigned char key, int x, int y) {
             }
         } else {
             // state player 2
-            if(scoreP2 != 1 && ladders[scoreP2]) {
-                scoreP2 = ladders[scoreP2];
-                glutPostRedisplay();
-            }
-
-            if(scoreP2 != 1 && snakes[scoreP2]) {
-                scoreP2 = snakes[scoreP2];
-                glutPostRedisplay();
-            }
-
             if (scoreP2 >= 84) {
                 scoreP2 = 84;
                 glutPostRedisplay();
@@ -433,6 +423,17 @@ void onPressSpace(unsigned char key, int x, int y) {
                     turn = 1;
                     cout << "Player 2: " << randomNumber() << endl;
                     glutPostRedisplay();
+
+                    if(scoreP2 != 1 && ladders[scoreP2]) {
+                        scoreP2 = ladders[scoreP2];
+                        glutPostRedisplay();
+                    }
+
+                    if(scoreP2 != 1 && snakes[scoreP2]) {
+                        scoreP2 = snakes[scoreP2];
+                        glutPostRedisplay();
+                    }
+
                     if(scoreP2 >= 84) {
                         cout << "Player 2 Win!!!" << endl;
                         scoreP2 = 84;
@@ -461,8 +462,6 @@ void display(){
     glColor3f(0.0, 1.0, 0.0);
     drawBorderTile(w, h);
     drawTrack(w, h, x, wx);
-    pionTile(scoreP1, w, h, x, y, wx, hy);
-    pionTriangle(scoreP2, w, h, x, y, wx, hy);
 
     drawLadder(210, 5, 8, 30, 30, 0);
     drawLadder(530, -120, 6, 30, 30, 30);
@@ -470,6 +469,9 @@ void display(){
     drawLadder(-88, 320, 6, 30, 30, -90);
 
     drawSnake();
+
+    pionTile(scoreP1, w, h, x, y, wx, hy);
+    pionTriangle(scoreP2, w, h, x, y, wx, hy);
 
     glutKeyboardFunc(onPressSpace);
 
@@ -507,6 +509,7 @@ int main(int argc, char* argv[]){
 	glutInitWindowSize(600,350);
 	glutInitWindowPosition(300,200);
 	glutCreateWindow("Ular Tangga");
+	cout << "Tekan Spasi Untuk Memulai Permainan" << endl;
 	glutDisplayFunc(display);
 	myinit();
 	init_snakes_ladders();
