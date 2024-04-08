@@ -13,6 +13,7 @@
 
 using namespace std;
 
+// Global Variabel
 int * snakes;
 int * ladders;
 
@@ -22,11 +23,11 @@ int turn = 1;
 bool gameOver = false;
 
 void drawNumber(int number, int x, int y) {
-    // Mengubah angka menjadi string
+    // Change number to string
     char str[20];
     snprintf(str, sizeof(str), "%d", number);
 
-    // Menampilkan angka
+    // Display number
     glRasterPos2i(x, y);
     for(int i = 0; i < strlen(str); i++) {
         glutBitmapCharacter(GLUT_BITMAP_HELVETICA_18, str[i]);
@@ -39,7 +40,7 @@ void drawTile(int x, int y, int ny, int wx, int hy) {
         for(int j = 0; j < y; j++) {
             if(i % 2 == 0) {
                 if(j % 2 == 0) {
-                    // Merah
+                    // Hijau
                     glColor3f(0.0, 0.7, 0.4);
                 } else {
                     // Putih
@@ -56,7 +57,7 @@ void drawTile(int x, int y, int ny, int wx, int hy) {
                     // Putih
                     glColor3f(1.0, 1.0, 1.0);
                 } else {
-                    // Merah
+                    // Hijau
                     glColor3f(0.0, 0.7, 0.4);
                 }
                 glBegin(GL_POLYGON);
@@ -127,7 +128,7 @@ void drawPatternNumber(int x, int y, int ny, int wx, int hy) {
                (secondDigit == wahyudi || secondDigit == dani || secondDigit == evi || secondDigit == ilham)) {
                 drawNumber(currentNumber, j * wx + 10, i * hy + 10);
                 // Jika keduanya cocok, tampilkan kedua digit
-            } else if (firstDigit == wahyudi || firstDigit == dani || firstDigit == evi || firstDigit == ilham && secondDigit != 0) {
+            } else if (firstDigit == wahyudi || firstDigit == dani || firstDigit == evi || firstDigit == ilham) {
                 drawNumber(firstDigit, j * wx + 10, i * hy + 10);
                 // Jika hanya digit pertama cocok, tampilkan digit pertama saja
             } else if (secondDigit == wahyudi || secondDigit == dani || secondDigit == evi || secondDigit == ilham) {
@@ -142,7 +143,7 @@ void drawBorderTile(int w, int h) {
     glColor3f(0.0, 0.0, 0.0);
 
     glBegin(GL_POLYGON);
-        //Border Kiri
+        //Border Left
         glVertex2f(0, h);
         glVertex2f(4, h);
         glVertex2f(4, 0);
@@ -150,7 +151,7 @@ void drawBorderTile(int w, int h) {
     glEnd();
 
     glBegin(GL_POLYGON);
-    // Border Atas
+    // Border Top
         glVertex2f(0, h);
         glVertex2f(w, h);
         glVertex2f(w, h - 4);
@@ -158,7 +159,7 @@ void drawBorderTile(int w, int h) {
     glEnd();
 
     glBegin(GL_POLYGON);
-        // Border Kanan
+        // Border Right
         glVertex2f(w, 0);
         glVertex2f(w - 4, 0);
         glVertex2f(w - 4, h);
@@ -166,7 +167,7 @@ void drawBorderTile(int w, int h) {
     glEnd();
 
     glBegin(GL_POLYGON);
-        // Border Bawah
+        // Border Bottom
         glVertex2f(0, 0);
         glVertex2f(w, 0);
         glVertex2f(w, 4);
@@ -183,7 +184,7 @@ void drawTrack(int w, int h, int x, int wx) {
     for(int i = 1; i <= x; i++) {
         if(i % 2 == 0) {
             glBegin(GL_POLYGON);
-                // Border Kanan Kiri
+                // Border Right - Left
                 glVertex2f(w, i * wx);
                 glVertex2f(wx, i * wx);
                 glVertex2f(wx, i * wx - 4);
@@ -191,7 +192,7 @@ void drawTrack(int w, int h, int x, int wx) {
             glEnd();
         } else {
             glBegin(GL_POLYGON);
-                // Border Kiri Kanan
+                // Border Left Right
                 glVertex2f(0, i * wx);
                 glVertex2f(w - wx, i * wx);
                 glVertex2f(w - wx, i * wx - 4);
@@ -219,7 +220,7 @@ void drawLadder(int startX, int startY, int step, int stepHeight, int stepWidth,
         glVertex2f(startX + stepWidth, startY);
     glEnd();
 
-    // Anak buah tangga
+    // Childs of Ladder
 
     for(int i = 1; i <= step - 1; i++) {
         glBegin(GL_POLYGON);
@@ -298,14 +299,12 @@ void drawSnake() {
 
 }
 
-//Pion triangle
-void pionTriangle(int score, int w, int h, int xA, int yA, int wx, int hy) {
-    int x = 0;
-    int y = 0;
-
+// Function to move the pion
+void move(int score, int w, int h, int wx, int hy, int& x, int& y) {
+    // Y axis
     y = (floor((score - 1) / 12 + 1) * hy - 20);
 
-
+    // X axis
     if(score <= 12) {
         x = floor(score * wx - 20);
     } else {
@@ -324,6 +323,13 @@ void pionTriangle(int score, int w, int h, int xA, int yA, int wx, int hy) {
 
         }
     }
+}
+//Pion triangle
+void pionTriangle(int score, int w, int h, int wx, int hy) {
+    int x = 0;
+    int y = 0;
+
+    move(score, w, h, wx, hy, x, y);
 
     // Biru
     glColor3f(1.0, 0.0, 0.0);
@@ -335,31 +341,11 @@ void pionTriangle(int score, int w, int h, int xA, int yA, int wx, int hy) {
 }
 
 // Pion square
-void pionTile(int score, int w, int h, int xA, int yA, int wx, int hy) {
+void pionTile(int score, int w, int h, int wx, int hy) {
     int x = 0;
     int y = 0;
 
-    y = (floor((score - 1) / 12 + 1) * hy - 20);
-
-
-    if(score <= 12) {
-        x = floor(score * wx - 20);
-    } else {
-        if(floor((score / 12) % 2 != 0)) {;
-            if(score % 12 != 0) {
-                x = floor(w - ((score - 1) % 12) * wx - 20);
-            } else {
-                x = floor(((score - 1) % 12) * wx + 20);
-            }
-        } else {
-            if(score % 12 != 0) {
-                x = floor(((score - 1) % 12) * wx + 30);
-            } else {
-                x = floor(w - ((score - 1) % 12) * wx - 20);
-            }
-
-        }
-    }
+    move(score, w, h, wx, hy, x, y);
 
     // Biru
     glColor3f(0.0, 0.0, 1.0);
@@ -378,6 +364,7 @@ int randomNumber() {
     return randAngka;
 }
 
+// Event Handler
 void onPressSpace(unsigned char key, int x, int y) {
     if(!gameOver) {
         // state player 1
@@ -393,11 +380,14 @@ void onPressSpace(unsigned char key, int x, int y) {
                     turn = 2;
                     cout << "Player 1: " << randomNumber() << endl;
                     glutPostRedisplay();
+
+                    // Ladder Checking
                     if(scoreP1 != 1 && ladders[scoreP1]) {
                         scoreP1 = ladders[scoreP1];
                         glutPostRedisplay();
                     }
 
+                    // Snake Checking
                     if(scoreP1 != 1 && snakes[scoreP1]) {
                         scoreP1 = snakes[scoreP1];
                         glutPostRedisplay();
@@ -424,11 +414,13 @@ void onPressSpace(unsigned char key, int x, int y) {
                     cout << "Player 2: " << randomNumber() << endl;
                     glutPostRedisplay();
 
+                    // Ladder Checking
                     if(scoreP2 != 1 && ladders[scoreP2]) {
                         scoreP2 = ladders[scoreP2];
                         glutPostRedisplay();
                     }
 
+                    // Snake Checking
                     if(scoreP2 != 1 && snakes[scoreP2]) {
                         scoreP2 = snakes[scoreP2];
                         glutPostRedisplay();
@@ -470,8 +462,8 @@ void display(){
 
     drawSnake();
 
-    pionTile(scoreP1, w, h, x, y, wx, hy);
-    pionTriangle(scoreP2, w, h, x, y, wx, hy);
+    pionTile(scoreP1, w, h, wx, hy);
+    pionTriangle(scoreP2, w, h, wx, hy);
 
     glutKeyboardFunc(onPressSpace);
 
@@ -491,16 +483,17 @@ void init_snakes_ladders()
 	snakes = new int[100];
 	ladders = new int[100];
 
+    // Ladder Init
 	ladders[1] = 1;
 	ladders[5] = 53;
 	ladders[15] = 18;
-	ladders[25] = 68;
+	ladders[25] = 70;
 	ladders[38] = 81;
 
+	// Snake Init
 	snakes[45] = 2;
 	snakes[79] = 33;
 	snakes[37] = 10;
-
 }
 
 int main(int argc, char* argv[]){
